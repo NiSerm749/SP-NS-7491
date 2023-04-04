@@ -1,0 +1,23 @@
+FROM ubuntu:latest
+
+# Установка необходимых пакетов
+RUN apt-get update && apt-get install -y \
+    imagemagick \
+    file \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /home/vboxuser/Desktop/docklab/
+WORKDIR /home/vboxuser/Desktop/docklab/
+
+# Определение монтируемой папки
+VOLUME ["/home/vboxuser/Pictures:/home/vboxuser/Desktop/docklab"]
+
+# Копирование скрипта в контейнер
+COPY script.sh /home/vboxuser/Desktop/docklab/script.sh
+
+
+# Установка прав на скрипт
+RUN chmod +x /home/vboxuser/Desktop/docklab/script.sh
+
+# Запуск скрипта при запуске контейнера
+CMD ["bash", "/home/vboxuser/Desktop/docklab/script.sh"]
